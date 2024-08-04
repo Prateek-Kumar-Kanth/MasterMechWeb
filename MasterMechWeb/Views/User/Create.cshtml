@@ -1,0 +1,242 @@
+﻿@model MasterMechData.User
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<h2>New User</h2>
+
+
+@section scripts
+{
+    <script>
+$(document).ready(function () {
+            $("#ErrorMessage").html("&nbsp;");
+            $("#msUserID").keydown(function (event) {
+                $("#ErrorMessage").html("&nbsp;");
+            });
+            $("#msUserID").click(function (event) {
+                $("#ErrorMessage").html("&nbsp;");
+            });
+        });</script>
+}
+<script type="text/javascript">
+
+    //function ValidateEmail() {
+    //    var email = $('#emailInput').val(); // Get the email input value
+    //    var emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/; // Regex for email validation
+
+    //    if (emailRegex.test(email)) {
+    //        // If email format is valid, make AJAX request to validate email
+    //        $.ajax({
+    //            url: '@@Url.Action("ValidateEmail", "User")', //this ValidateEmail is a method in user Controller Class
+    //            type: 'POST',
+    //            data: { email: email },
+    //            dataType: 'json',
+    //            success: function(response) {
+    //                if (response.isValid) {
+    //                    // Email is valid
+    //                    $("#emailErrorMessage").text("Email is valid");
+    //                } else {
+    //                    // Email is not valid
+    //                    $("#emailErrorMessage").text("Email is invalid");
+    //                }
+    //            },
+    //            error: function() {
+    //                // Handle error
+    //                $("#emailErrorMessage").text("Error occurred during validation");
+    //            }
+    //        });
+    //    } else {
+    //        // Display error message if email format is invalid
+    //        $("#emailErrorMessage").text("Invalid email format");
+    //    }
+    //}
+
+
+    function ValidateUserID(){
+        $.ajax(
+            {
+                url: '@Url.Action("ValidUser","User")', //this ValidUser is in UserController
+                dataType: "json",
+                data:
+                {
+                    isUserID: $('#msUserID').val()
+                },
+                success: function (response) {
+                    if (response.msValidUser == 'Y') {
+                        lsText = "User already exists";
+                    }
+                    else {
+                        lsText = "User does not exist";
+                    }
+                    $("#ErrorMessage").html(lsText);
+                    return false;
+                },
+                error: function () {
+                    alert(response);
+                    return false;
+                }
+            }
+        );
+    }
+    function SubmitForm()
+    {
+        if ($("#msPassword").val() != $("#ConfirmPWD").val()) {
+            $("#ErrorMessage").html("Password and Confirm password do not match.");
+            return false;
+        }
+        else
+        {
+            $("#UserCreateForm").submit();
+        }
+    }
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <h4 style="color:red">@ViewBag.InsertMsg</h4>
+    <div class="form-horizontal">
+
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            <div class="col-md-offset-2 input-group col-md-10">
+                <div id="ErrorMessage" class="text-danger"> </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.msUserID, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.msUserID, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.msUserID, "", new { @class = "text-danger" })
+
+                    <input type="button" onclick="ValidateUserID()" value="Verify" />
+                </div>
+            </div>
+        </div>
+        <br />
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.msPassword, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.msPassword, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.msPassword, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <br />
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.msUserName, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.msUserName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.msUserName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <br />
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.msMobileNo, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.msMobileNo, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.msMobileNo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <br />
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.msEmail, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.msEmail, new { htmlAttributes = new { @class = "form-control", id= "emailInput", onblur = "ValidateEmail()" } })
+                    @Html.ValidationMessageFor(model => model.msEmail, "", new { @class = "text-danger" })
+                    <div id="emailErrorMessage"></div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.msUserType, htmlAttributes: new { @class = "control-label col-md-2" })
+                </div>
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.msUserType, (SelectList)ViewBag.UserType, "Select Type", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.msUserType, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <!--
+                <div class="form-group">
+        <div class="row">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.msUserType, htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.msUserType, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.msUserType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+        -->
+
+        <br />
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.msRemarks, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.msRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.msRemarks, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <br />
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.msCreatedBy, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.msCreatedBy, new { @class = "form-control", @readonly = "readonly", @Value = MasterMechPrj.MasterMechUtil.msUserName })
+                    @Html.ValidationMessageFor(model => model.msCreatedBy, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="form-group" style="margin-left:220px">
+            <div class="col-md-offset-2 col-md-10">
+                <input style="border: 1px solid black;" type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Main", "Home")
+</div>

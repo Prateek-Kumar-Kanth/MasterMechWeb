@@ -1,0 +1,209 @@
+﻿@model MasterMechData.Customer
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Customer</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.mnCustomerNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mnCustomerNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msCustFirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msCustFirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msCustLastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msCustLastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msCustMobile)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msCustMobile)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msCustEmail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msCustEmail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msCustStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msCustStatus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msCustType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msCustType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msCustStreet)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msCustStreet)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msCustArea)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msCustArea)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msCustCity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msCustCity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msCustState)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msCustState)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msCustPincode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msCustPincode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msCustCountry)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msCustCountry)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msCustGSTNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msCustGSTNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mdCustLastVisit)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mdCustLastVisit)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msCustRemarks)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msCustRemarks)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mdCustCreated)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mdCustCreated)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msCustCreatedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msCustCreatedBy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mdCustModified)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mdCustModified)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msCustModifiedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msCustModifiedBy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mcCustDeleted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mcCustDeleted)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mdDeletedOn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mdDeletedOn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mcCustDeletedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mcCustDeletedBy)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model=>model.mnCustomerNo)
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

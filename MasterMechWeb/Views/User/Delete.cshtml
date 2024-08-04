@@ -1,0 +1,159 @@
+﻿@model MasterMechData.User
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+
+<div>
+    <h4>User</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.msUserID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msUserID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msPassword)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msPassword)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msUserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msUserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msMobileNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msMobileNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msEmail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msEmail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msUserType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msUserType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msRemarks)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msRemarks)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mdLastLoginTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mdLastLoginTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mdLastPasswordChangeTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mdLastPasswordChangeTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msCreatedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msCreatedBy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mdCreated)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mdCreated)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mdModified)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mdModified)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msModifiedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msModifiedBy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mcDeleted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mcDeleted)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mdDeletedOn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mdDeletedOn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mdDeletedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mdDeletedBy)
+        </dd>
+
+
+    </dl>
+
+    @using (Html.BeginForm("Delete", "User", FormMethod.Post)) 
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(model=>model.msUserID) // This Line must be under @using(Html.BeginForm()) if not then it pass ""null" value to HttpPost ActionMethod Delete()
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

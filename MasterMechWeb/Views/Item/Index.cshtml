@@ -1,0 +1,146 @@
+﻿@model IEnumerable<MasterMechData.Items>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            S.No.
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mnItemNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msItemDesc)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msItemType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msItemCategory)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mnItemPrice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msItemUOM)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msItemStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mnCGST)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mnSGST)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mnIGST)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msUPCCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msHSNCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msSACCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mnQtyHand)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mnReorderLevel)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mnReorderQty)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mnNoOfParts)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msItemRemarks)
+        </th>
+        
+        <th></th>
+    </tr>
+
+@{ int lnSNo = 1;}
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @lnSNo
+            @{ lnSNo++;}
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mnItemNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msItemDesc)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msItemType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msItemCategory)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mnItemPrice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msItemUOM)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msItemStatus)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mnCGST)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mnSGST)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mnIGST)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msUPCCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msHSNCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msSACCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mnQtyHand)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mnReorderLevel)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mnReorderQty)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mnNoOfParts)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msItemRemarks)
+        </td>
+       
+        <td>
+            @Html.ActionLink("Edit", "Edit", new {  id=item.mnItemNo }) |
+            @Html.ActionLink("Details", "Details", new {  id=item.mnItemNo  }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.mnItemNo })
+        </td>
+    </tr>
+}
+
+</table>

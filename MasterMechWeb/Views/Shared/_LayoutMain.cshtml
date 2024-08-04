@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style>
+        body, ul {
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul {
+            list-style: none;
+            background-color: #333;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline-block;
+            position: relative;
+        }
+
+        nav ul li a {
+            display: block;
+            padding: 15px 20px;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        nav ul li:hover > ul.dropdown-menu {
+            display: block;
+        }
+
+        nav ul ul.dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: #333;
+            width: 100%;
+        }
+
+        nav ul ul.dropdown-menu li {
+            display: block;
+        }
+
+        nav ul ul.dropdown-menu li a {
+            padding: 10px 20px;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        nav ul ul.dropdown-menu li a:hover {
+            background-color: #555;
+        }
+        
+    </style>
+</head>
+<body>
+    
+    <nav>
+        <ul>
+            <li style="font-size:22px;">
+                @Html.ActionLink("MasterMech", "Index", "Home")
+            </li>
+            <li class="dropdown">
+                <a href="#">Invoice</a>
+                <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("New", "Create", "Invoice")</li>
+                    <li>@Html.ActionLink("Open", "Index", "Home")</li>
+                    <li>@Html.ActionLink("List", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Delete", "Index", "Home")</li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#">Item</a>
+                <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("New", "Create", "Item")</li>
+                    <li>@Html.ActionLink("Manage", "Index", "Item")</li>
+                    
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="#">Customer</a>
+                <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("New", "Create", "Customer")</li>
+                    <li>@Html.ActionLink("Manage", "Index", "Customer")</li>
+                   
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="#">User</a>
+                <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("New", "Create", "User")</li>
+                    <li>@Html.ActionLink("Manage", "Index", "User")</li>
+                    
+                </ul>
+            </li>
+
+            <li><a href="#">Contact</a></li>
+
+            <li class="dropdown">
+                <a href="#">@MasterMechPrj.MasterMechUtil.msUserName</a>
+                <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("Change Password", "", "")</li>
+                    <li>@Html.ActionLink("Log Out", "", "")</li>
+
+                </ul>
+            </li>
+        </ul>
+
+    </nav>
+    <!-- <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+         <div class="container">
+             @Html.ActionLink("Master Mech", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+             <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
+                     aria-expanded="false" aria-label="Toggle navigation">
+                 <span class="navbar-toggler-icon"></span>
+             </button>
+             <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
+                 <ul class="navbar-nav flex-grow-1">
+                     <li>@Html.ActionLink("Invoice", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                     <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                     <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                     <li>@Html.ActionLink("Login", "Login", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+
+                 </ul>
+             </div>
+         </div>
+     </nav>-->
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,225 @@
+﻿@model MasterMechData.Items
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Items</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.mnItemNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mnItemNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msItemDesc)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msItemDesc)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msItemType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msItemType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msItemCategory)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msItemCategory)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mnItemPrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mnItemPrice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msItemUOM)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msItemUOM)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msItemStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msItemStatus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mnCGST)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mnCGST)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mnSGST)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mnSGST)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mnIGST)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mnIGST)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msUPCCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msUPCCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msHSNCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msHSNCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msSACCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msSACCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mnQtyHand)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mnQtyHand)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mnReorderLevel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mnReorderLevel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mnReorderQty)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mnReorderQty)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mnNoOfParts)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mnNoOfParts)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msItemRemarks)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msItemRemarks)
+        </dd>
+        <!--
+        <dt>
+            @Html.DisplayNameFor(model => model.msCreatedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msCreatedBy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mdCreated)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mdCreated)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mdModified)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mdModified)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.msModifiedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.msModifiedBy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mcDeleted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mcDeleted)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mdDeletedOn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mdDeletedOn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mdDeletedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mdDeletedBy)
+        </dd>-->
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model=>model.mnItemNo)
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

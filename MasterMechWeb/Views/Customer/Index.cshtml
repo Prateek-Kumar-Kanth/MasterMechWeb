@@ -1,0 +1,176 @@
+﻿@model IEnumerable<MasterMechData.Customer>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>S. No.</th>
+        <th>
+            @Html.DisplayNameFor(model => model.mnCustomerNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustFirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustLastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustMobile)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustEmail)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustStreet)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustArea)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustCity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustState)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustPincode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustCountry)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustGSTNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mdCustLastVisit)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msCustRemarks)
+        </th>
+        <!--
+    <th>
+        @Html.DisplayNameFor(model => model.mdCustCreated)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.msCustCreatedBy)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.mdCustModified)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.msCustModifiedBy)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.mcCustDeleted)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.mdDeletedOn)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.mcCustDeletedBy)
+    </th>
+    -->
+        <th></th>
+    </tr>
+
+@{ int lnSNo = 1;}
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @lnSNo
+            @{lnSNo++;}
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mnCustomerNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msCustFirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msCustLastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msCustMobile)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msCustEmail)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msCustStatus)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msCustType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msCustStreet)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msCustArea)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msCustCity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msCustState)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msCustPincode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msCustCountry)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msCustGSTNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mdCustLastVisit)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msCustRemarks)
+        </td>
+        <!--
+     <td>
+         @Html.DisplayFor(modelItem => item.mdCustCreated)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => item.msCustCreatedBy)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => item.mdCustModified)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => item.msCustModifiedBy)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => item.mcCustDeleted)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => item.mdDeletedOn)
+     </td>
+     <td>
+         @Html.DisplayFor(modelItem => item.mcCustDeletedBy)
+     </td>
+    -->
+        <td>
+            @Html.ActionLink("Edit", "Edit", new {  id=item.mnCustomerNo  }) |
+            @Html.ActionLink("Details", "Details", new {  id=item.mnCustomerNo }) |
+            @Html.ActionLink("Delete", "Delete", new {  id=item.mnCustomerNo })
+        </td>
+    </tr>
+}
+
+</table>

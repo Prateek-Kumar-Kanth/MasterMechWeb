@@ -1,0 +1,111 @@
+﻿@model IEnumerable<MasterMechData.User>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<script type="text/javascript">
+    function ResetSearch()
+    {
+        var lsURL = '@Url.Action("Index", "User")';
+        window.location = lsURL;
+    }
+    function ApplySearch()
+    {
+        if ($("#txtSearchName").val() == "")
+        {
+            ResetSearch();
+        }
+        else
+        {
+            var lsURL = '@Url.Action("SearchUserName", "User", new {isUserId = "TempUserId"})';
+            lsURL = lsURL.replace("TempUserId", encodeURIComponent($("#txtSearchName").val()));
+            lsURL = lsURL.replace(/&amp;/g, "&");
+            window.location = lsURL;
+
+        }
+    }
+</script>
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<div class="table-responsive">
+    <table class="table table-sm">
+        <tr>
+            <td class="col-md-6"></td>
+            <td class="text-right align-self-center">Name</td>
+            <td class="text-right"><input type="text" class="form-control" id="txtSearchName" @*onkeyup="ApplySearch()*@"/></td>
+            <td>
+                <input type="button" value="Search" id="btnApplyFilter" class="btn btn-primary btn-large" onclick="ApplySearch();" />
+            </td>
+            <td class="col-md-2"><input type="button" value="Reset Search" class="btn btn-info btn-large" onclick="ResetSearch();" /></td>
+        </tr>
+    </table>
+</div>
+<table class="table">
+    
+    <tr>
+        <th>S. No.</th>
+        <th>
+            @Html.DisplayNameFor(model => model.msUserID)
+        </th>
+        
+        <th>
+            @Html.DisplayNameFor(model => model.msUserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msMobileNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msEmail)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msUserType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.msRemarks)
+        </th>
+        
+        <th></th>
+    </tr>
+@{ int lnSNo = 1;}
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @lnSNo
+            @{lnSNo++;}
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msUserID)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.msUserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msMobileNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msEmail)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msUserType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.msRemarks)
+        </td>
+      
+
+        <td>
+            <!-- Don't Use like This Html.ActionLink("Edit", "Edit","User", new {  id=item.msUserID }) |'-->
+            @Html.ActionLink("Edit", "Edit", new { id = item.msUserID }) |
+            @Html.ActionLink("Details", "Details", new {  id=item.msUserID  }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.msUserID })
+        </td>
+    </tr>
+}
+
+</table>

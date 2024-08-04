@@ -1,0 +1,75 @@
+﻿@model MasterMechData.User
+
+@{
+    ViewBag.Title = "Login Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Login</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+<div class="form-horizontal">
+    @if (ViewBag.EmptyOrNot == true)
+    {
+       <p style="color:red;">Empty Fields</p>
+    }
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.FYr, htmlAttributes: new { @class = "control-label col-md-2" })
+            </div>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model=>model.FYr, (SelectList)ViewBag.FYList, "Select a Financial Year", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.FYr, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+
+        <div class="row">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.msUserID, htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.msUserID, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.msUserID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.msPassword, htmlAttributes: new { @class = "control-label col-md-2" })
+            </div>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.msPassword, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.msPassword, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input style="border: 1px solid black; margin-right: 50px; margin-left: 220px; " type="submit" value="Login" class="btn btn-default" />
+            <input style="border: 1px solid black;" type="button" value="Reset" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+ }
+<br />
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

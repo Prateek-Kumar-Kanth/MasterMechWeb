@@ -1,0 +1,1241 @@
+﻿@model MasterMechData.Invoice
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<style>
+    /* Style the tab */
+    .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+    }
+
+        /* Style the buttons that are used to open the tab content */
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+        }
+
+            /* Change background color of buttons on hover */
+            .tab button:hover {
+                background-color: #ddd;
+            }
+
+            /* Create an active/current tablink class */
+            .tab button.active {
+                background-color: #ccc;
+            }
+
+    /* Style the tab content */
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
+
+    #button {
+        background-color: lightgreen;
+        border: 0px;
+    }
+
+    th, td {
+        padding: 10px;
+    }
+</style>
+<script>
+    function SelectItemIntoFields(rowIndex) {
+        
+        var table = document.getElementById("ItemTable");
+        var row = table.rows[rowIndex];
+
+
+        document.getElementById("txtItemNo").value = row.cells[1].textContent;
+        document.getElementById("txtDesc").value = row.cells[2].textContent;
+        document.getElementById("txtPrice").value = row.cells[5].textContent;
+        document.getElementById("txtUOM").value = row.cells[6].textContent;
+        document.getElementById("txtQty").value = row.cells[7].textContent;
+        document.getElementById("txtCGST").value = row.cells[8].textContent;
+        
+        document.getElementById("txtSGST").value = row.cells[9].textContent;
+        
+        document.getElementById("txtIGST").value = row.cells[10].textContent;
+
+        document.getElementById("txtCGSTAmt").value = row.cells[11].textContent;
+
+        document.getElementById("txtSGSTAmt").value = row.cells[12].textContent;
+
+        document.getElementById("txtIGSTAmt").value = row.cells[13].textContent;
+
+        document.getElementById("txtTotalAmt").value = row.cells[14].textContent;
+        document.getElementById("txtDiscount").value = row.cells[15].textContent;
+        document.getElementById("txtNetAmt").value = row.cells[16].textContent;
+        document.getElementById("txtTotalTax").value = row.cells[17].textContent;
+        document.getElementById("txtGrossAmt").value = row.cells[18].textContent;
+
+    }
+    var GridSNo = 1;
+    function addRow() {
+
+        var table = document.getElementById("ItemTable");
+        var row = table.insertRow(); // Insert a row at the end of the table
+        
+        row.insertCell(0).innerHTML = GridSNo++;
+        row.insertCell(1).innerHTML = document.getElementById("txtItemNo").value;
+        row.insertCell(2).innerHTML = document.getElementById("txtDesc").value;
+        row.insertCell(3).innerHTML = document.getElementById("txtType").value;
+        row.insertCell(4).innerHTML = document.getElementById("txtCatg").value;
+        row.insertCell(5).innerHTML = document.getElementById("txtPrice").value;
+        row.insertCell(6).innerHTML = document.getElementById("txtUOM").value;
+        row.insertCell(7).innerHTML = document.getElementById("txtQty").value;
+        row.insertCell(8).innerHTML = document.getElementById("txtCGST").value;
+        row.insertCell(9).innerHTML = document.getElementById("txtSGST").value;
+        row.insertCell(10).innerHTML = document.getElementById("txtIGST").value;
+
+        row.insertCell(11).innerHTML = document.getElementById("txtCGSTAmt").value;
+        row.insertCell(12).innerHTML = document.getElementById("txtSGSTAmt").value;
+        row.insertCell(13).innerHTML = document.getElementById("txtIGSTAmt").value;
+
+        row.insertCell(14).innerHTML = document.getElementById("txtTotalAmt").value;
+
+        var lnDiscount = document.getElementById("txtDiscount").value;
+        lnDiscount = (lnDiscount == "") ? 0 : lnDiscount;
+        row.insertCell(15).innerHTML = lnDiscount;
+
+        row.insertCell(16).innerHTML = document.getElementById("txtNetAmt").value;
+        row.insertCell(17).innerHTML = document.getElementById("txtTotalTax").value;
+        row.insertCell(18).innerHTML = document.getElementById("txtGrossAmt").value;
+
+       /* when i click on "select" it works but it bring us to top of the web page i want to prevent from go to top*/
+        row.insertCell(19).innerHTML = '<a href="#txtItemNo" onclick="SelectItemIntoFields(' + GridSNo + ')">Select</a>';
+
+
+        BillingTabUpdate();
+        ClearItemData();
+
+    }
+    function BillingTabUpdate() {
+       
+        var table = document.getElementById('ItemTable');
+
+        // Get all tr elements within the table
+        var tdElements = table.getElementsByTagName('tr');
+
+        // Count the number of tr elements
+        var trCount = tdElements.length;
+        
+
+        var lnPartTotal = 0;
+        var lnLabourTotal = 0;
+
+        var lnPartsSGST = 0;
+        var lnPartsCGST = 0;
+        var lnPartsIGST = 0;
+
+        var lnLabourSGST = 0;
+        var lnLabourCGST = 0;
+        var lnLabourIGST = 0;
+        var lnDiscount = 0;
+
+        if (trCount >= 2) { //check grid is empty or not
+
+            for (var i = 2; i < trCount; i++) {
+              
+                var row = table.rows[i]; //first records is on index 2
+                var type = row.cells[3].textContent;
+                
+                if (type == "Parts" || type == "PARTS") {
+                 
+                    lnPartTotal += parseInt(row.cells[16].textContent);
+                    lnPartsCGST += parseInt(row.cells[11].textContent);
+                    lnPartsSGST += parseInt(row.cells[12].textContent);
+                    lnPartsIGST += parseInt(row.cells[13].textContent);
+                }
+                else {
+                    
+                    lnLabourTotal += parseInt(row.cells[16].textContent);
+                    lnLabourCGST += parseInt(row.cells[11].textContent);
+                    lnLabourSGST += parseInt(row.cells[12].textContent);
+                    lnLabourIGST += parseInt(row.cells[13].textContent);
+                }
+                lnDiscount += parseInt(row.cells[15].textContent);
+            }
+            document.getElementById("txtPartsTotal").value = lnPartTotal;
+            document.getElementById("txtLabourTotal").value = lnLabourTotal;
+
+            document.getElementById("txtPartsCGSTTotal").value = lnPartsCGST;
+            document.getElementById("txtPartsSGSTTotal").value = lnPartsSGST;
+            document.getElementById("txtPartsIGSTTotal").value = lnPartsIGST;
+
+            document.getElementById("txtLabourCGSTTotal").value = lnLabourCGST;
+            document.getElementById("txtLabourSGSTTotal").value = lnLabourSGST;
+            document.getElementById("txtLabourIGSTTotal").value = lnLabourIGST;
+
+            document.getElementById("txtBillTotalNetAmt").value = lnPartTotal + lnLabourTotal;
+            document.getElementById("txtTotalCGST").value = lnPartsCGST + lnLabourCGST;
+            document.getElementById("txtTotalSGST").value = lnPartsSGST + lnLabourSGST;
+            document.getElementById("txtTotalIGST").value = lnPartsIGST + lnLabourIGST;
+            
+            document.getElementById("txtBillDiscount").value = lnDiscount;
+            document.getElementById("txtBillTotalTax").value = lnPartsCGST + lnLabourCGST + lnPartsSGST + lnLabourSGST + lnPartsIGST + lnLabourIGST;
+
+            document.getElementById("txtBillGrandTotal").value = parseFloat(document.getElementById("txtBillTotalNetAmt").value) + parseInt(document.getElementById("txtBillTotalTax").value);
+
+        }  
+
+    }
+    function ClearItemData() {
+
+        document.getElementById("txtItemNo").value = "";
+        document.getElementById("txtDesc").value = "";
+        document.getElementById("txtPrice").value = "";
+        document.getElementById("txtUOM").value = "";
+        document.getElementById("txtQty").value = "";
+        document.getElementById("txtGrossAmt").value = "";
+        document.getElementById("txtSGST").value = "";
+        document.getElementById("txtCGST").value = "";
+        document.getElementById("txtIGST").value = "";
+        document.getElementById("txtSGSTAmt").value = "";
+        document.getElementById("txtCGSTAmt").value = "";
+        document.getElementById("txtIGSTAmt").value = "";
+        document.getElementById("txtDiscount").value = "";
+        document.getElementById("txtNetAmt").value = "";
+        document.getElementById("txtTotalTax").value = "";
+        document.getElementById("txtTotalAmt").value = "";
+
+    }
+    function Calculation() {
+
+        var lnQty = document.getElementById("txtQty").value;
+        var lnPrice = document.getElementById("txtPrice").value;
+
+        var lnTotalAmt = lnQty * lnPrice;
+
+        var lnCGSTRate = document.getElementById("txtCGST").value;
+        var lnSGSTRate = document.getElementById("txtSGST").value;
+        var lnIGSTRate = document.getElementById("txtIGST").value;
+
+        document.getElementById("txtTotalAmt").value = lnTotalAmt;
+
+        document.getElementById("txtCGSTAmt").value = lnQty * lnPrice * lnCGSTRate / 100;
+        document.getElementById("txtSGSTAmt").value = lnQty * lnPrice * lnSGSTRate / 100;
+        document.getElementById("txtIGSTAmt").value = lnQty * lnPrice * lnIGSTRate / 100;
+
+        var lnCGSTAmt = document.getElementById("txtCGSTAmt").value;
+        var lnSGSTAmt = document.getElementById("txtSGSTAmt").value;
+        var lnIGSTAmt = document.getElementById("txtIGSTAmt").value;
+        var lnDiscount = document.getElementById("txtDiscount").value;
+
+        var lnTotalTax = parseInt(lnCGSTAmt) + parseInt(lnSGSTAmt) + parseInt(lnIGSTAmt);
+        document.getElementById("txtTotalTax").value = lnTotalTax;
+
+        var lnNetAmt = lnTotalAmt - lnDiscount;
+        document.getElementById("txtNetAmt").value = lnNetAmt;
+
+        var lnGrossAmt = lnNetAmt + lnTotalTax;
+        document.getElementById("txtGrossAmt").value = lnNetAmt;
+
+
+    }
+
+    function DataSelection(rowIndex) {
+
+
+        var table = document.getElementById("myTable");
+        var row = table.rows[rowIndex];
+
+
+        document.getElementById("txtItemNo").value = row.cells[2].textContent;
+        document.getElementById("txtDesc").value = row.cells[3].textContent;
+        document.getElementById("txtPrice").value = row.cells[6].textContent;
+        document.getElementById("txtUOM").value = row.cells[7].textContent;
+
+        document.getElementById("txtType").value = row.cells[4].textContent;
+        document.getElementById("txtCatg").value = row.cells[5].textContent;
+        document.getElementById("txtCGST").value = row.cells[9].textContent;
+        document.getElementById("txtSGST").value = row.cells[10].textContent;
+        document.getElementById("txtIGST").value = row.cells[11].textContent;
+       
+        $('#ItemModal').modal('hide'); // to close the modal popup
+
+    }
+    function CustomerData(rowIndex) {
+        
+        var table = document.getElementById("CustTable");
+        var row = table.rows[rowIndex];
+
+        document.getElementById("txtCustNo").value = row.cells[2].textContent;
+        document.getElementById("txtCustFName").value = row.cells[3].textContent;
+        document.getElementById("txtCustLName").value = row.cells[4].textContent;
+        document.getElementById("txtCustMobNo").value = row.cells[5].textContent;
+        document.getElementById("txtCustEmail").value = row.cells[6].textContent;
+        document.getElementById("txtCustSts").value = row.cells[7].textContent;
+        document.getElementById("txtCustType").value = row.cells[8].textContent;
+        document.getElementById("txtCustStAdd").value = row.cells[9].textContent;
+        document.getElementById("txtCustArAdd").value = row.cells[10].textContent;
+
+        document.getElementById("txtCustCity").value = row.cells[11].textContent;
+        document.getElementById("txtCustState").value = row.cells[12].textContent;
+        document.getElementById("txtCustPinCode").value = row.cells[13].textContent;
+        document.getElementById("txtCustCountry").value = row.cells[14].textContent;
+       
+        document.getElementById("txtCustLastVisit").value = row.cells[16].textContent;
+        document.getElementById("txtCustRemarks").value = row.cells[17].textContent;
+
+        $('#CustomerModal').modal('hide'); // to close the modal popup
+    }
+    function OpenTab(evt, TabName) {
+        var i, tabcontent, tablinks;
+
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+
+        document.getElementById(TabName).style.display = "block";
+        evt.currentTarget.className += " active";
+        evt.preventDefault();
+    }
+    window.onload = function () {
+        var evt = {}; // Define evt as an event object
+        OpenTab(evt, 'Customer');
+    };
+
+
+    function openCity(evt, cityName) {
+        // Declare all variables
+        var i, tabcontent, tablinks;
+
+        // Get all elements with class="tabcontent" and hide them
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        // Get all elements with class="tablinks" and remove the class "active"
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+
+        // Show the current tab, and add an "active" class to the button that opened the tab
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    function ItemSearch() {
+        ClearItemData();
+        $('#ItemModal').modal('show');
+    }
+    function CustSearch() {
+        $('#CustomerModal').modal('show');
+    }
+
+</script>
+
+    <h2>Create</h2>
+    <!-- Tab links -->
+    <div class="tab">
+        <button class="tablinks" onclick="openCity(event, 'Customer')">Customer</button>
+        <button class="tablinks" onclick="openCity(event, 'Vehicle')">Vehicle</button>
+        <button class="tablinks" onclick="openCity(event, 'Billing')">Billing</button>
+
+    </div>
+    <form action="" method="post">
+        <!-- Tab content -->
+        <div id="Customer" class="tabcontent">
+            <table>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.msCustMobNo, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.msCustMobNo, new { htmlAttributes = new { @class = "form-control", id = "txtCustMobNo" } })
+                                    @Html.ValidationMessageFor(model => model.msCustMobNo, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-2">
+
+                                    @*<button id="btnSearch" class="btn btn-sm btn-primary m-2" onclick="CustSearch();">M</button>*@
+                                    <input type="button" value="Search Customer" id="btnSearch" class="btn btn-sm btn-primary m-2" onclick="CustSearch();"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.mnCustNo, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.mnCustNo, new { htmlAttributes = new { @class = "form-control", id = "txtCustNo" } })
+                                    @Html.ValidationMessageFor(model => model.mnCustNo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.msCustFName, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.msCustFName, new { htmlAttributes = new { @class = "form-control", id = "txtCustFName" } })
+                                    @Html.ValidationMessageFor(model => model.msCustFName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.msCustLName, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.msCustLName, new { htmlAttributes = new { @class = "form-control", id = "txtCustLName" } })
+                                    @Html.ValidationMessageFor(model => model.msCustLName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.msCustType, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.msCustType, new { htmlAttributes = new { @class = "form-control", id = "txtCustType" } })
+                                    @Html.ValidationMessageFor(model => model.msCustType, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.msCustSts, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.msCustSts, new { htmlAttributes = new { @class = "form-control", id = "txtCustSts" } })
+                                    @Html.ValidationMessageFor(model => model.msCustSts, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.msCustStAddr, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.msCustStAddr, new { htmlAttributes = new { @class = "form-control", id = "txtCustStAdd" } })
+                                    @Html.ValidationMessageFor(model => model.msCustStAddr, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.msCustArAddr, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.msCustArAddr, new { htmlAttributes = new { @class = "form-control", id = "txtCustArAdd" } })
+                                    @Html.ValidationMessageFor(model => model.msCustArAddr, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.msCustCity, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.msCustCity, new { htmlAttributes = new { @class = "form-control", id = "txtCustCity" } })
+                                    @Html.ValidationMessageFor(model => model.msCustCity, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.msCustState, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.msCustState, new { htmlAttributes = new { @class = "form-control", id = "txtCustState" } })
+                                    @Html.ValidationMessageFor(model => model.msCustState, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.msCustCountry, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.msCustCountry, new { htmlAttributes = new { @class = "form-control", id = "txtCustCountry" } })
+                                    @Html.ValidationMessageFor(model => model.msCustCountry, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.msCustPinCode, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.msCustPinCode, new { htmlAttributes = new { @class = "form-control", id = "txtCustPinCode" } })
+                                    @Html.ValidationMessageFor(model => model.msCustPinCode, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.msCustEmail, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.msCustEmail, new { htmlAttributes = new { @class = "form-control", id = "txtCustEmail" } })
+                                    @Html.ValidationMessageFor(model => model.msCustEmail, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.mdCustlLastVisit, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.mdCustlLastVisit, new { htmlAttributes = new { @class = "form-control", id = "txtCustLastVisit" } })
+                                    @Html.ValidationMessageFor(model => model.mdCustlLastVisit, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.msCustRemarks, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.msCustRemarks, new { htmlAttributes = new { @class = "form-control", id = "txtCustRemarks" } })
+                                    @Html.ValidationMessageFor(model => model.msCustRemarks, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                    </td>
+                </tr>
+            </table>
+
+
+
+
+        </div>
+
+        <div id="Vehicle" class="tabcontent">
+
+            <table>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.msVehicleRegNo, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.msVehicleRegNo, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.msVehicleRegNo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.msVehicleModel, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.msVehicleModel, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.msVehicleModel, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.msChassisNo, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.msChassisNo, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.msChassisNo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.mnMileage, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.mnMileage, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.mnMileage, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.msServiceAssoName, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.msServiceAssoName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.msServiceAssoName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.msEngineNo, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.msEngineNo, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.msEngineNo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.msServiceType, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.msServiceType, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.msServiceType, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.msServiceAssoMobNo, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.msServiceAssoMobNo, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.msServiceAssoMobNo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+
+            </table>
+        </div>
+
+        <div id="Billing" class="tabcontent">
+            <table>
+                <tr>
+                    <!--This Row is for Parts-->
+                    <td>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.mnPartsTotal, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.mnPartsTotal, new { htmlAttributes = new { @class = "form-control", id = "txtPartsTotal" } })
+                                    @Html.ValidationMessageFor(model => model.mnPartsTotal, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.mnPartsCGSTTotal, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.mnPartsCGSTTotal, new { htmlAttributes = new { @class = "form-control", id = "txtPartsCGSTTotal" } })
+                                    @Html.ValidationMessageFor(model => model.mnPartsCGSTTotal, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.mnPartsSGSTTotal, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.mnPartsSGSTTotal, new { htmlAttributes = new { @class = "form-control", id = "txtPartsSGSTTotal" } })
+                                    @Html.ValidationMessageFor(model => model.mnPartsSGSTTotal, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.mnPartsIGSTTotal, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.mnPartsIGSTTotal, new { htmlAttributes = new { @class = "form-control", id = "txtPartsIGSTTotal" } })
+                                    @Html.ValidationMessageFor(model => model.mnPartsIGSTTotal, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+
+
+                    <!--This is for Labour part-->
+                    <td>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.mnLabourTotal, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.mnLabourTotal, new { htmlAttributes = new { @class = "form-control", id = "txtLabourTotal" } })
+                                    @Html.ValidationMessageFor(model => model.mnLabourTotal, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.mnLabourCGSTTotal, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.mnLabourCGSTTotal, new { htmlAttributes = new { @class = "form-control", id = "txtLabourCGSTTotal" } })
+                                    @Html.ValidationMessageFor(model => model.mnLabourCGSTTotal, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.mnLabourSGSTTotal, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.mnLabourSGSTTotal, new { htmlAttributes = new { @class = "form-control", id = "txtLabourSGSTTotal" } })
+                                    @Html.ValidationMessageFor(model => model.mnLabourSGSTTotal, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.mnLabourIGSTTotal, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.mnLabourIGSTTotal, new { htmlAttributes = new { @class = "form-control", id = "txtLabourIGSTTotal" } })
+                                    @Html.ValidationMessageFor(model => model.mnLabourIGSTTotal, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.mnTotalAmount, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.mnTotalAmount, new { htmlAttributes = new { @class = "form-control", id = "txtBillTotalNetAmt" } })
+                                    @Html.ValidationMessageFor(model => model.mnTotalAmount, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.mnTotalCGST, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.mnTotalCGST, new { htmlAttributes = new { @class = "form-control", id = "txtTotalCGST" } })
+                                    @Html.ValidationMessageFor(model => model.mnTotalCGST, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.mnTotalSGST, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.mnTotalSGST, new { htmlAttributes = new { @class = "form-control", id = "txtTotalSGST" } })
+                                    @Html.ValidationMessageFor(model => model.mnTotalSGST, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.mnTotalIGST, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.mnTotalIGST, new { htmlAttributes = new { @class = "form-control", id = "txtTotalIGST" } })
+                                    @Html.ValidationMessageFor(model => model.mnTotalIGST, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.mnDiscountAmount, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.mnDiscountAmount, new { htmlAttributes = new { @class = "form-control", id = "txtBillDiscount" } })
+                                    @Html.ValidationMessageFor(model => model.mnDiscountAmount, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.mnTotalTax, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.mnTotalTax, new { htmlAttributes = new { @class = "form-control", id = "txtBillTotalTax" } })
+                                    @Html.ValidationMessageFor(model => model.mnTotalTax, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.mnGrandTotal, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.mnGrandTotal, new { htmlAttributes = new { @class = "form-control", id = "txtBillGrandTotal" } })
+                                    @Html.ValidationMessageFor(model => model.mnGrandTotal, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
+
+        @*<div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.Label("Item No", htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-10">
+                    @Html.Editor("Item No", new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessage("TotalAmount", "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>*@
+        <table>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.InvoiceItem.ItemNo, htmlAttributes: new { @class = "control-label" })
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.InvoiceItem.ItemNo, new { htmlAttributes = new { @class = "form-control", id = "txtItemNo" } })
+
+                    @Html.ValidationMessageFor(model => model.InvoiceItem.ItemNo, "", new { @class = "text-danger" })
+
+                </td>
+                <td>
+                    @Html.LabelFor(model => model.InvoiceItem.ItemDesc, htmlAttributes: new { @class = "control-label" })
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.InvoiceItem.ItemDesc, new { htmlAttributes = new { @class = "form-control", id = "txtDesc" } })
+                    @Html.ValidationMessageFor(model => model.InvoiceItem.ItemDesc, "", new { @class = "text-danger" })
+
+                </td>
+                @*<td colspan="2"><input id="button" type="button" value="Search"/></td>*@
+                @*<button id="btnSearch" class="btn btn-sm btn-primary m-2" onclick="btnSearch();">Search</button>*@
+                <td colspan="2">
+                    <input type="button" value="Search Item" id="btnSearch" class="btn btn-sm btn-primary m-2" onclick="ItemSearch();"/>
+                </td>
+                <td>
+                    @Html.LabelFor(model => model.InvoiceItem.ItemPrice, htmlAttributes: new { @class = "control-label" })
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.InvoiceItem.ItemPrice, new { htmlAttributes = new { @class = "form-control", id = "txtPrice" } })
+                    @Html.ValidationMessageFor(model => model.InvoiceItem.ItemPrice, "", new { @class = "text-danger" })
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.InvoiceItem.ItemUOM, htmlAttributes: new { @class = "control-label" })
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.InvoiceItem.ItemUOM, new { htmlAttributes = new { @class = "form-control", id = "txtUOM" } })
+                    @Html.ValidationMessageFor(model => model.InvoiceItem.ItemUOM, "", new { @class = "text-danger" })
+
+                </td>
+                <td>
+                    @Html.LabelFor(model => model.InvoiceItem.Qty, htmlAttributes: new { @class = "control-label" })
+                </td>
+                <td colspan="3">
+                    @Html.EditorFor(model => model.InvoiceItem.Qty, new { htmlAttributes = new { @class = "form-control", id = "txtQty", onblur = "Calculation();" } })
+                    @Html.ValidationMessageFor(model => model.InvoiceItem.Qty, "", new { @class = "text-danger" })
+
+                </td>
+
+                <td>
+                    @Html.LabelFor(model => model.InvoiceItem.GrossAmount, htmlAttributes: new { @class = "control-label" })
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.InvoiceItem.GrossAmount, new { htmlAttributes = new { @class = "form-control", id = "txtGrossAmt", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.InvoiceItem.GrossAmount, "", new { @class = "text-danger" })
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.InvoiceItem.SGSTRate, htmlAttributes: new { @class = "control-label" })
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.InvoiceItem.SGSTRate, new { htmlAttributes = new { @class = "form-control", id = "txtSGST" } })
+                    @Html.ValidationMessageFor(model => model.InvoiceItem.SGSTRate, "", new { @class = "text-danger" })
+
+                </td>
+                <td>
+                    @Html.LabelFor(model => model.InvoiceItem.CGSTRate, htmlAttributes: new { @class = "control-label" })
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.InvoiceItem.CGSTRate, new { htmlAttributes = new { @class = "form-control", id = "txtCGST" } })
+                    @Html.ValidationMessageFor(model => model.InvoiceItem.CGSTRate, "", new { @class = "text-danger" })
+
+                </td>
+                <td>
+                    @Html.LabelFor(model => model.InvoiceItem.IGSTRate, htmlAttributes: new { @class = "control-label" })
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.InvoiceItem.IGSTRate, new { htmlAttributes = new { @class = "form-control", id = "txtIGST" } })
+                    @Html.ValidationMessageFor(model => model.InvoiceItem.IGSTRate, "", new { @class = "text-danger" })
+
+                </td>
+
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    @Html.EditorFor(model => model.InvoiceItem.SGSTAmount, new { htmlAttributes = new { @class = "form-control", id = "txtSGSTAmt", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.InvoiceItem.SGSTAmount, "", new { @class = "text-danger" })
+
+                </td>
+                <td></td>
+                <td>
+                    @Html.EditorFor(model => model.InvoiceItem.CGSTAmount, new { htmlAttributes = new { @class = "form-control", id = "txtCGSTAmt", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.InvoiceItem.CGSTAmount, "", new { @class = "text-danger" })
+
+                </td>
+                <td></td>
+                <td>
+                    @Html.EditorFor(model => model.InvoiceItem.IGSTAmount, new { htmlAttributes = new { @class = "form-control", id = "txtIGSTAmt", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.InvoiceItem.IGSTAmount, "", new { @class = "text-danger" })
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.InvoiceItem.DiscountAmount, htmlAttributes: new { @class = "control-label" })
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.InvoiceItem.DiscountAmount, new { htmlAttributes = new { @class = "form-control", id = "txtDiscount", onblur = "Calculation();" } })
+                    @Html.ValidationMessageFor(model => model.InvoiceItem.DiscountAmount, "", new { @class = "text-danger" })
+
+                </td>
+                <td>
+                    @Html.LabelFor(model => model.InvoiceItem.NetAmt, htmlAttributes: new { @class = "control-label" })
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.InvoiceItem.NetAmt, new { htmlAttributes = new { @class = "form-control", id = "txtNetAmt", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.InvoiceItem.NetAmt, "", new { @class = "text-danger" })
+
+                </td>
+                <td>
+                    @Html.LabelFor(model => model.InvoiceItem.TotalTax, htmlAttributes: new { @class = "control-label" })
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.InvoiceItem.TotalTax, new { htmlAttributes = new { @class = "form-control", id = "txtTotalTax", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.InvoiceItem.TotalTax, "", new { @class = "text-danger" })
+
+                </td>
+                <td>
+                    @Html.LabelFor(model => model.InvoiceItem.TotalAmount, htmlAttributes: new { @class = "control-label" })
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.InvoiceItem.TotalAmount, new { htmlAttributes = new { @class = "form-control", id = "txtTotalAmt", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.InvoiceItem.TotalAmount, "", new { @class = "text-danger" })
+
+                </td>
+            </tr>
+
+            <tr>
+                @*this tr is for hiddent fields*@
+                <td>
+                    @Html.HiddenFor(model => model.InvoiceItem.ItemType, new { @id = "txtType" })
+                    @Html.HiddenFor(model => model.InvoiceItem.ItemCatg, new { @id = "txtCatg" })
+
+                </td>
+            </tr>
+        </table>
+
+        <!-- For Item Modal-->
+        <div id="ItemModal" class="modal fade modal">
+            <div class="modal-dialog" style="width:auto">
+                @*width is use for fill all column name of tables*@
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="text-info modal-title">Item List</h1>
+                        <button class="close text-danger" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+
+                        <table id="myTable">
+                            <tr>
+                                <th></th>
+                                <th>S.No.</th>
+                                <th>Item No.</th>
+                                <th>Description</th>
+                                <th>Type</th>
+                                <th>Cat</th>
+                                <th>Price</th>
+                                <th>UOM</th>
+                                <th>Status</th>
+                                <th>CGST</th>
+                                <th>SGST</th>
+                                <th>IGST</th>
+                                <th>UPC Code</th>
+                                <th>HSN Code</th>
+                                <th>SAC Code</th>
+                                <th>Qty In Hand</th>
+                                <th>Reorder Level</th>
+                                <th>Reorder Qty</th>
+                                <th>No.of Parts</th>
+                                <th>Remarks</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            @{ int lSNo = 1;}
+                            @foreach (var Item in ViewBag.ListItems)
+                            {
+
+                                <tr>
+                                    @*<td>@Html.ActionLink("Select", null, null, new { onclick= " DataSelection("+lSNo+");" })</td>*@ @*Dont use this, it refreshes the parent page*@
+                                    <td><a href="#" onclick="DataSelection('@lSNo'); return false;">Select</a></td> @*we use anchor tag for preventing refreshing the parent page*@
+                                    <td>@lSNo</td>
+                                    @{ lSNo++;}
+
+                                    <td>@Item.mnItemNo</td>
+                                    <td>@Item.msItemDesc</td>
+                                    <td>@Item.msItemType</td>
+                                    <td>@Item.msItemCategory</td>
+                                    <td>@Item.mnItemPrice</td>
+                                    <td>@Item.msItemUOM</td>
+                                    <td>@Item.msItemStatus</td>
+                                    <td>@Item.mnCGST</td>
+                                    <td>@Item.mnSGST</td>
+                                    <td>@Item.mnIGST</td>
+                                    <td>@Item.msUPCCode</td>
+                                    <td>@Item.msHSNCode</td>
+                                    <td>@Item.msSACCode</td>
+                                    <td>@Item.mnQtyHand</td>
+                                    <td>@Item.mnReorderLevel</td>
+                                    <td>@Item.mnReorderQty</td>
+                                    <td>@Item.mnNoOfParts</td>
+                                    <td>@Item.msItemRemarks</td>
+
+
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                    <div class="modal-footer"></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!--For Customer Modal-->
+        <div id="CustomerModal" class="modal fade modal">
+            <div class="modal-dialog" style="width:auto">
+                @*width is use for fill all column name of tables*@
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="text-info modal-title">Customer List</h1>
+                        <button class="close text-danger" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+
+                        <table id="CustTable">
+                            <tr>
+                                <th></th>
+                                <th>S. NO.</th>
+                                <th>Customer No</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Mobile No</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Type</th>
+                                <th>Street Address</th>
+                                <th>Area Address</th>
+                                <th>City</th>
+                                <th>State</th>
+                                <th>Pin Code</th>
+                                <th>Country</th>
+                                <th>GST No</th>
+                                <th>Last Visit</th>
+                                <th>Remarks</th>
+
+                            </tr>
+                            @{ int lnCustSNo = 1;}
+                            @foreach (var item in ViewBag.ListCustomer)
+                            {
+
+                                <tr>
+                                    @*<td>@Html.ActionLink("Select", null, null, new { onclick= " DataSelection("+lSNo+");" })</td> Dont use this, it refreshes the parent page*@
+                                    <td><a href="#" onclick="CustomerData('@lnCustSNo'); return false;">Select</a></td> @*we use anchor tag for preventing refreshing the parent page*@
+                                    <td>@lnCustSNo</td>
+                                    @{ lnCustSNo++;}
+
+                                    <td>@item.mnCustomerNo</td>
+                                    <td>@item.msCustFirstName</td>
+                                    <td>@item.msCustLastName</td>
+                                    <td>@item.msCustMobile</td>
+                                    <td>@item.msCustEmail</td>
+                                    <td>@item.msCustStatus</td>
+                                    <td>@item.msCustType</td>
+                                    <td>@item.msCustStreet</td>
+                                    <td>@item.msCustArea</td>
+                                    <td>@item.msCustCity</td>
+                                    <td>@item.msCustState</td>
+                                    <td>@item.msCustPincode</td>
+                                    <td>@item.msCustCountry</td>
+                                    <td>@item.msCustGSTNo</td>
+                                    <td>@item.mdCustLastVisit</td>
+                                    <td>@item.msCustRemarks</td>
+
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                    <div class="modal-footer"></div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <br />
+
+        <div style="text-align:right;">
+            <input type="button" value="Delete" id="btnSearch" class="btn btn-sm btn-primary m-2"/>
+            <input type="button" value="Cancel" id="btnSearch" class="btn btn-sm btn-primary m-2"/>
+            <input type="button" value="Add List" id="btnSearch" class="btn btn-sm btn-primary m-2" onclick="addRow();"/>
+        </div>
+        <br />
+        <table id="ItemTable" width="100%">
+            <tr>
+                <th>S.NO.</th>
+                <th>Item No.</th>
+                <th>Item Desc.</th>
+                <th>Type</th>
+                <th>Catg</th>
+                <th>Price</th>
+                <th>UOM</th>
+                <th>Qty</th>
+                <th>CGST Rate</th>
+                <th>SGST Rate</th>
+                <th>IGST Rate</th>
+                <th>CGST Amt</th>
+                <th>SGST Amt</th>
+                <th>IGST Amt</th>
+                <th>Total Amount</th>
+                <th>Discount</th>
+                <th>Net Amount</th>
+                <th>Total Tax</th>
+                <th>Gross Amount</th>
+
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+        <hr />
+        <div style="text-align:right">
+            <input type="submit" value="Save" id="btnSearch" class="btn btn-sm btn-primary m-2" />
+            <input type="button" value="Finalize" id="btnSearch" class="btn btn-sm btn-primary m-2" />
+            <input type="button" value="Print" id="btnSearch" class="btn btn-sm btn-primary m-2" />
+        </div>
+    </form>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+        }
+
+        <div>
+            @Html.ActionLink("Back to List", "Index")
+        </div>
